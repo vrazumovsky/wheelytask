@@ -2,5 +2,6 @@
     <string name="app_name">WheelyTestTask</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
+    <string name="auth">Authorization</string>
 
 </resources>
