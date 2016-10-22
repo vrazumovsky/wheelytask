@@ -42,4 +42,13 @@
             android:textSize="16sp"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_gravity="center"
+        android:text="@string/login"
+        android:textSize="18sp"
+        android:background="@color/colorAccent"
+        android:layout_width="200dp"
+        android:layout_height="64dp" />
 </LinearLayout>
