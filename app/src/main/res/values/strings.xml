@@ -5,4 +5,6 @@
     <string name="auth">Authorization</string>
     <string name="cab_tracking">Cab tracking</string>
 
+    <string name="empty_login_password_warning">Login and password can not be empty</string>
+
 </resources>
