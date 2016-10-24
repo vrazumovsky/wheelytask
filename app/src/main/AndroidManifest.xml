@@ -22,6 +22,8 @@
 
         <activity android:name=".MapActivity" />
 
+        <service android:name=".ConnectionService" />
+
     </application>
 
 </manifest>
