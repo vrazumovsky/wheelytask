@@ -16,7 +16,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp">
         <EditText
-            android:id="@+id/login"
+            android:id="@+id/login_edit_text"
             android:hint="@string/login"
             android:textColorHint="@color/colorPrimary"
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp">
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/password_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
