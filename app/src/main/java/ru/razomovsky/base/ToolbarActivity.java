@@ -1,8 +1,8 @@
-package profunion.razomovsky.base;
+package ru.razomovsky.base;
 
 import android.support.v7.app.AppCompatActivity;
 
-import profunion.razomovsky.R;
+import ru.razomovsky.R;
 
 
 /**

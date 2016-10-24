@@ -1,8 +1,8 @@
-package profunion.razomovsky.util;
+package ru.razomovsky.util;
 
 import android.support.v7.app.AppCompatActivity;
 
-import profunion.razomovsky.ProgressDialogFragment;
+import ru.razomovsky.ProgressDialogFragment;
 
 /**
  * Created by vadim on 22/10/16.

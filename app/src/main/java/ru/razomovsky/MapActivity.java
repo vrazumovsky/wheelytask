@@ -1,8 +1,8 @@
-package profunion.razomovsky;
+package ru.razomovsky;
 
 import android.os.Bundle;
 
-import profunion.razomovsky.base.ToolbarActivity;
+import ru.razomovsky.base.ToolbarActivity;
 
 /**
  * Created by vadim on 22/10/16.

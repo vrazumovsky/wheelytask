@@ -1,11 +1,11 @@
-package profunion.razomovsky;
+package ru.razomovsky;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import profunion.razomovsky.base.ToolbarActivity;
+import ru.razomovsky.base.ToolbarActivity;
 
 public class LoginActivity extends ToolbarActivity {
 

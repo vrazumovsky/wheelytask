@@ -1,4 +1,4 @@
-package profunion.razomovsky;
+package ru.razomovsky;
 
 
 import android.app.Dialog;
