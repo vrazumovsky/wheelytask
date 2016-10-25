@@ -17,7 +17,6 @@ import ru.razomovsky.base.ToolbarActivity;
 import ru.razomovsky.server.ConnectionService;
 import ru.razomovsky.server.ResponseCodes;
 import ru.razomovsky.ui.ProgressDialogFragment;
-import ru.razomovsky.util.UIUtils;
 
 public class LoginActivity extends ToolbarActivity {
 
@@ -107,10 +106,10 @@ public class LoginActivity extends ToolbarActivity {
         passwordEditText.setText("");
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
-
     }
 }
