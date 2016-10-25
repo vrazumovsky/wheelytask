@@ -31,10 +31,11 @@ public class ConnectionService extends IntentService {
     public static final String PASSWORD_ARG = "ru.razomovsky.server.ConnectionService.PASSWORD_ARG";
 
     public ConnectionService() {
-        super("ConnectionService");
+        this("ConnectionService");
     }
     public ConnectionService(String name) {
         super(name);
+        setIntentRedelivery(true);
     }
 
     @Override
