@@ -1,4 +1,4 @@
-package ru.razomovsky;
+package ru.razomovsky.ui;
 
 
 import android.app.Dialog;
@@ -8,6 +8,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ru.razomovsky.R;
 
 /**
  * Created by vadim on 22/10/16.
