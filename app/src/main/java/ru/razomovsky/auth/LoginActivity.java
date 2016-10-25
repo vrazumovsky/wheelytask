@@ -104,6 +104,7 @@ public class LoginActivity extends ToolbarActivity {
         if (dialogFragment != null) {
             dialogFragment.dismiss();
         }
+        passwordEditText.setText("");
     }
 
     @Override
