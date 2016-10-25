@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -88,6 +89,9 @@ public class ConnectionService extends IntentService {
             });
             ws.connect();
 
+        } catch (OpeningHandshakeException e) {
+            int code = e.getStatusLine().getStatusCode();
+            Log.w(TAG, "Error code: " + String.valueOf(code));
         } catch (Exception e) {
             e.printStackTrace();
         }
