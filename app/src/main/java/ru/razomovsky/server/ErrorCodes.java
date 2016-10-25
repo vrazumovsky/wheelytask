@@ -5,5 +5,6 @@ package ru.razomovsky.server;
  */
 
 public interface ErrorCodes {
+    int SUCCESS = 200;
     int FORBIDDEN = 403;
 }
