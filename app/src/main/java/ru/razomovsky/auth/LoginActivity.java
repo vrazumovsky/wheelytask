@@ -1,4 +1,4 @@
-package ru.razomovsky;
+package ru.razomovsky.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ru.razomovsky.R;
 import ru.razomovsky.base.ToolbarActivity;
 import ru.razomovsky.server.ConnectionService;
 
