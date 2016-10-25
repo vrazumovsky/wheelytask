@@ -1,4 +1,4 @@
-package ru.razomovsky;
+package ru.razomovsky.server;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -24,8 +24,8 @@ public class ConnectionService extends IntentService {
 
     private static final String BACKEND_URL = "ws://mini-mdt.wheely.com";
 
-    public static final String USER_NAME_ARG = "ru.razomovsky.ConnectionService.USER_NAME_ARG";
-    public static final String PASSWORD_ARG = "ru.razomovsky.ConnectionService.PASSWORD_ARG";
+    public static final String USER_NAME_ARG = "ru.razomovsky.server.ConnectionService.USER_NAME_ARG";
+    public static final String PASSWORD_ARG = "ru.razomovsky.server.ConnectionService.PASSWORD_ARG";
 
     public ConnectionService() {
         super("ConnectionService");

@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import ru.razomovsky.base.ToolbarActivity;
+import ru.razomovsky.server.ConnectionService;
 
 public class LoginActivity extends ToolbarActivity {
 
