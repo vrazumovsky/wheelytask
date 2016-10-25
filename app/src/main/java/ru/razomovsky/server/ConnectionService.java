@@ -2,6 +2,7 @@ package ru.razomovsky.server;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.neovisionaries.ws.client.OpeningHandshakeException;
@@ -13,6 +14,8 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 
 import java.util.List;
 import java.util.Map;
+
+import ru.razomovsky.auth.LoginActivity;
 
 /**
  * Created by vadim on 20/10/16.
@@ -51,8 +54,9 @@ public class ConnectionService extends IntentService {
                 @Override
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     super.onConnected(websocket, headers);
-                    Log.d(TAG, "***********************************");
-                    Log.d(TAG, websocket.getURI().toString());
+                    Log.d(TAG, "Connected to server");
+                    sendLoginResultBroadcast(ResponseCodes.SUCCESS);
+
                     websocket.sendText("{\n" +
                             "\n" +
                             "\"lat\": 55.373703,\n" +
@@ -92,8 +96,15 @@ public class ConnectionService extends IntentService {
         } catch (OpeningHandshakeException e) {
             int code = e.getStatusLine().getStatusCode();
             Log.w(TAG, "Error code: " + String.valueOf(code));
+            sendLoginResultBroadcast(code);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendLoginResultBroadcast(int result){
+        Intent intent = new Intent (LoginActivity.LOGIN_RESULT_INTENT_FILTER);
+        intent.putExtra(LoginActivity.LOGIN_RESULT_ARG, result);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }
