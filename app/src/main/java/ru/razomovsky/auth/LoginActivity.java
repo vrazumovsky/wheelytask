@@ -1,5 +1,7 @@
 package ru.razomovsky.auth;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,11 +9,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ru.razomovsky.MapActivity;
 import ru.razomovsky.R;
 import ru.razomovsky.base.ToolbarActivity;
 import ru.razomovsky.server.ConnectionService;
+import ru.razomovsky.server.ResponseCodes;
+import ru.razomovsky.ui.ProgressDialogFragment;
+import ru.razomovsky.util.UIUtils;
 
 public class LoginActivity extends ToolbarActivity {
+
+    public static final String LOGIN_RESULT_ARG = "ru.razumovsky.auth.LoginActivity.LOGIN_RESULT_ARG";
 
     private EditText loginEditText;
     private EditText passwordEditText;
@@ -55,4 +63,22 @@ public class LoginActivity extends ToolbarActivity {
     private boolean isEditTextEmpty(EditText editText) {
         return editText.getText() == null || editText.getText().toString().equals("");
     }
+
+    private class LoginResultBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            dialogFragment.dismiss();
+            int result = intent.getIntExtra(LOGIN_RESULT_ARG, -1);
+            if (result == -1) {
+                throw new IllegalStateException("Need to set login result in broadcast");
+            } else if (result == ResponseCodes.FORBIDDEN) {
+                Toast.makeText(LoginActivity.this,
+                        R.string.login_password_error, Toast.LENGTH_SHORT).show();
+            } else if (result == ResponseCodes.SUCCESS) {
+                startActivity(new Intent(LoginActivity.this, MapActivity.class));
+            }
+
+        }
+    }
+
 }

@@ -6,5 +6,6 @@
     <string name="cab_tracking">Cab tracking</string>
 
     <string name="empty_login_password_warning">Login and password can not be empty</string>
+    <string name="login_password_error">Wrong login or password</string>
 
 </resources>
