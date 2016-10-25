@@ -10,7 +10,9 @@ import ru.razomovsky.ui.ProgressDialogFragment;
 
 public class UIUtils {
 
-    public static void showProgressDialog(AppCompatActivity activity) {
-        new ProgressDialogFragment().show(activity.getSupportFragmentManager(), null);
+    public static ProgressDialogFragment showProgressDialog(AppCompatActivity activity) {
+        ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
+        progressDialogFragment.show(activity.getSupportFragmentManager(), null);
+        return progressDialogFragment;
     }
 }

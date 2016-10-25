@@ -15,6 +15,7 @@ public class LoginActivity extends ToolbarActivity {
 
     private EditText loginEditText;
     private EditText passwordEditText;
+    private ProgressDialogFragment dialogFragment;
 
 
     @Override
@@ -34,6 +35,7 @@ public class LoginActivity extends ToolbarActivity {
             @Override
             public void onClick(View view) {
                 if (isLoginPasswordValid()) {
+                    dialogFragment = UIUtils.showProgressDialog(LoginActivity.this);
                     Intent intent = new Intent(LoginActivity.this, ConnectionService.class);
                     intent.putExtra(ConnectionService.USER_NAME_ARG, loginEditText.getText().toString());
                     intent.putExtra(ConnectionService.PASSWORD_ARG, passwordEditText.getText().toString());
