@@ -22,6 +22,11 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
             "ru.razomovsky.MapActivity.CAB_LOCATIONS_INTENT_FILTER";
 
     private GoogleMap map;
+
+    /**
+     * key is the id of the cab
+     */
+    private Map<Integer, Marker> cabs = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
