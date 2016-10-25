@@ -10,6 +10,9 @@ import ru.razomovsky.base.ToolbarActivity;
 
 public class MapActivity extends ToolbarActivity {
 
+    public static final String CAB_LOCATIONS_ARG = "ru.razomovsky.MapActivity.CAB_LOCATIONS_ARG";
+    public static final String CAB_LOCATIONS_INTENT_FILTER =
+            "ru.razomovsky.MapActivity.CAB_LOCATIONS_INTENT_FILTER";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
