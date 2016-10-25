@@ -43,7 +43,11 @@ public class LoginActivity extends ToolbarActivity {
             @Override
             public void onClick(View view) {
                 if (isLoginPasswordValid()) {
-                    dialogFragment = UIUtils.showProgressDialog(LoginActivity.this);
+                    if (dialogFragment == null) {
+                        dialogFragment = new ProgressDialogFragment();
+                    }
+                    dialogFragment.show(getSupportFragmentManager(), null);
+
                     Intent intent = new Intent(LoginActivity.this, ConnectionService.class);
                     intent.putExtra(ConnectionService.USER_NAME_ARG, loginEditText.getText().toString());
                     intent.putExtra(ConnectionService.PASSWORD_ARG, passwordEditText.getText().toString());
