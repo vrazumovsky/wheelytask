@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -15,6 +16,7 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import java.util.List;
 import java.util.Map;
 
+import ru.razomovsky.MapActivity;
 import ru.razomovsky.auth.LoginActivity;
 
 /**
@@ -77,6 +79,8 @@ public class ConnectionService extends IntentService {
                 public void onTextMessage(WebSocket websocket, String text) throws Exception {
                     super.onTextMessage(websocket, text);
                     Log.d(TAG, text);
+                    CabLocation[] locations = new Gson().fromJson(text, CabLocation[].class);
+                    sendCabLocationsBroadcast(locations);
                 }
 
                 @Override
@@ -106,6 +110,12 @@ public class ConnectionService extends IntentService {
     private void sendLoginResultBroadcast(int result){
         Intent intent = new Intent (LoginActivity.LOGIN_RESULT_INTENT_FILTER);
         intent.putExtra(LoginActivity.LOGIN_RESULT_ARG, result);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void sendCabLocationsBroadcast(CabLocation[] locations) {
+        Intent intent = new Intent (MapActivity.CAB_LOCATIONS_INTENT_FILTER);
+        intent.putExtra(MapActivity.CAB_LOCATIONS_ARG, locations);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }
