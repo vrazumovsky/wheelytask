@@ -3,6 +3,7 @@ package ru.razomovsky.auth;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,10 +21,15 @@ import ru.razomovsky.util.UIUtils;
 public class LoginActivity extends ToolbarActivity {
 
     public static final String LOGIN_RESULT_ARG = "ru.razumovsky.auth.LoginActivity.LOGIN_RESULT_ARG";
+    public static final String LOGIN_RESULT_INTENT_FILTER =
+            "ru.razumovsky.auth.LoginActivity.LOGIN_RESULT_INTENT_FILTER";
+
 
     private EditText loginEditText;
     private EditText passwordEditText;
     private ProgressDialogFragment dialogFragment;
+
+    private LoginResultBroadcastReceiver receiver = new LoginResultBroadcastReceiver();
 
 
     @Override
@@ -85,4 +91,20 @@ public class LoginActivity extends ToolbarActivity {
         }
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(receiver, new IntentFilter(LOGIN_RESULT_INTENT_FILTER));
+        if (dialogFragment != null) {
+            dialogFragment.dismiss();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(receiver);
+
+    }
 }
