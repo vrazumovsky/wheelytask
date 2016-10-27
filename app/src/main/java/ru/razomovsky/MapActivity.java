@@ -17,11 +17,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
 import ru.razomovsky.base.ToolbarActivity;
 import ru.razomovsky.server.CabLocation;
+import ru.razomovsky.server.ConnectionService;
 
 /**
  * Created by vadim on 22/10/16.
@@ -123,4 +125,9 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        stopService(new Intent(this, ConnectionService.class));
+    }
 }
