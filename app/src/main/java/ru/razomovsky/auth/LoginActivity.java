@@ -36,6 +36,7 @@ public class LoginActivity extends ToolbarActivity {
     private EditText loginEditText;
     private EditText passwordEditText;
     private ProgressDialogFragment dialogFragment;
+    private boolean requestInProgress = false;
 
     private LoginResultBroadcastReceiver receiver = new LoginResultBroadcastReceiver();
 
@@ -61,6 +62,7 @@ public class LoginActivity extends ToolbarActivity {
                         dialogFragment = new ProgressDialogFragment();
                     }
                     dialogFragment.show(getSupportFragmentManager(), null);
+                    requestInProgress = true;
                     requestLocationPermission();
                 } else {
                     Toast.makeText(LoginActivity.this,
@@ -101,6 +103,7 @@ public class LoginActivity extends ToolbarActivity {
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
+                            requestInProgress = false;
                             dialogFragment.dismiss();
                             Toast.makeText(LoginActivity.this,
                                     R.string.permission_error, Toast.LENGTH_LONG).show();
@@ -136,6 +139,7 @@ public class LoginActivity extends ToolbarActivity {
                 Toast.makeText(LoginActivity.this,
                         "Unsupported result code: " + result, Toast.LENGTH_SHORT).show();
             }
+            requestInProgress = false;
 
         }
     }
