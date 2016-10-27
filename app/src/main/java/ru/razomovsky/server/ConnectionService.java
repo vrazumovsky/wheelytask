@@ -70,6 +70,12 @@ public class ConnectionService extends IntentService {
                 }
 
                 @Override
+                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+                    Log.d(TAG, "disconnected: " + websocket.getURI().toString());
+                }
+
+                @Override
                 public void onCloseFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
                     super.onCloseFrame(websocket, frame);
                     Log.d(TAG, "closed");
