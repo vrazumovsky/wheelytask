@@ -56,4 +56,16 @@ public class CabLocation implements Parcelable {
     public String toString() {
         return "id: " + cabId + "; lat: " + latitude + "; lon: " + longitude;
     }
+
+    public int getCabId() {
+        return cabId;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
 }
