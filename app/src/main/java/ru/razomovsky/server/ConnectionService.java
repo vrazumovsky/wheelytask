@@ -44,6 +44,7 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
     public static final String USER_NAME_ARG = "ru.razomovsky.server.ConnectionService.USER_NAME_ARG";
     public static final String PASSWORD_ARG = "ru.razomovsky.server.ConnectionService.PASSWORD_ARG";
 
+    private final Object webSocketLock = new Object();
     private WebSocket ws;
     private GoogleApiClient mGoogleApiClient;
     private boolean isNeedLocationUpdates = false;
@@ -52,6 +53,19 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
         @Override
         public void onLocationChanged(Location location) {
             Log.d(TAG, "new location: " + location);
+            synchronized (webSocketLock) {
+                if (ws != null) {
+                    String locationStr = "{" +
+                            "\"lat\":" +
+                            location.getLatitude() +
+                            "," +
+                            "\"lon\":" +
+                            location.getLongitude() +
+                            "}";
+
+                    ws.sendText(locationStr);
+                }
+            }
         }
     };
 
@@ -136,10 +150,11 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                     "?username=" + userName +
                     "&password=" + password;
 
-
-            if (ws != null) {
-                ws.disconnect();
-                ws = null;
+            synchronized (webSocketLock) {
+                if (ws != null) {
+                    ws.disconnect();
+                    ws = null;
+                }
             }
 
             ws = factory.createSocket(socketUrl);
