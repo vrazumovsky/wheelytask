@@ -35,4 +35,11 @@ public class ProgressDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.progress_dialog, container, false);
     }
+
+    @Override
+    public void dismiss() {
+        if (isAdded()) {
+            super.dismiss();
+        }
+    }
 }
