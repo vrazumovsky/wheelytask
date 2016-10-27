@@ -234,5 +234,9 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
     public void onDestroy() {
         super.onDestroy();
         removeLocationUpdates();
+        mGoogleApiClient.disconnect();
+        if (ws != null) {
+            ws.disconnect();
+        }
     }
 }
