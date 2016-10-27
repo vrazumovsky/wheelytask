@@ -203,4 +203,10 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
         intent.putExtra(MapActivity.CAB_LOCATIONS_ARG, locations);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        removeLocationUpdates();
+    }
 }
