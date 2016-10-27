@@ -146,13 +146,6 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                     Log.d(TAG, "Connected to server");
                     sendLoginResultBroadcast(ResponseCodes.SUCCESS);
 
-                    websocket.sendText("{\n" +
-                            "\n" +
-                            "\"lat\": 55.373703,\n" +
-                            "\n" +
-                            "\"lon\": 37.474764\n" +
-                            "\n" +
-                            "}");
                 }
 
                 @Override
