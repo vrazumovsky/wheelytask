@@ -26,6 +26,7 @@ import ru.razomovsky.ui.ProgressDialogFragment;
 public class LoginActivity extends ToolbarActivity {
 
     public static final String TAG = "LoginActivity";
+    private static final String DIALOG_TAG = "DIALOG_TAG";
     
     public static final String LOGIN_RESULT_ARG = "ru.razumovsky.auth.LoginActivity.LOGIN_RESULT_ARG";
     public static final String LOGIN_RESULT_INTENT_FILTER =
@@ -35,7 +36,8 @@ public class LoginActivity extends ToolbarActivity {
 
     private EditText loginEditText;
     private EditText passwordEditText;
-    private ProgressDialogFragment dialogFragment;
+    private ProgressDialogFragment dialogFragment = new ProgressDialogFragment();
+
     private boolean requestInProgress = false;
 
     private LoginResultBroadcastReceiver receiver = new LoginResultBroadcastReceiver();
@@ -58,11 +60,8 @@ public class LoginActivity extends ToolbarActivity {
             @Override
             public void onClick(View view) {
                 if (isLoginPasswordValid()) {
-                    if (dialogFragment == null) {
-                        dialogFragment = new ProgressDialogFragment();
-                    }
-                    dialogFragment.show(getSupportFragmentManager(), null);
                     requestInProgress = true;
+                    dialogFragment.show(getSupportFragmentManager(), DIALOG_TAG);
                     requestLocationPermission();
                 } else {
                     Toast.makeText(LoginActivity.this,
@@ -125,7 +124,6 @@ public class LoginActivity extends ToolbarActivity {
     private class LoginResultBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            dialogFragment.dismiss();
             int result = intent.getIntExtra(LOGIN_RESULT_ARG, -1);
             if (result == -1) {
                 throw new IllegalStateException("Need to set login result in broadcast");
@@ -140,18 +138,29 @@ public class LoginActivity extends ToolbarActivity {
                         "Unsupported result code: " + result, Toast.LENGTH_SHORT).show();
             }
             requestInProgress = false;
+            dialogFragment.dismiss();
+        }
+    }
 
         }
     }
 
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        ProgressDialogFragment fragmentByTag =
+                (ProgressDialogFragment) getSupportFragmentManager().findFragmentByTag(DIALOG_TAG);
+        if (fragmentByTag != null) {
+            dialogFragment = fragmentByTag;
+        }
+        requestInProgress = savedInstanceState.getBoolean(PROGRESS_ARG);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(LOGIN_RESULT_INTENT_FILTER));
-        if (dialogFragment != null) {
-            dialogFragment.dismiss();
-        }
         passwordEditText.setText("");
     }
 
