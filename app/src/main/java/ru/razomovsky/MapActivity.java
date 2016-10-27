@@ -62,6 +62,8 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "onMapReady called");
         map = googleMap;
+        map.setMyLocationEnabled(true);
+
     }
 
     private Marker putMarker(int id, LatLng position) {
