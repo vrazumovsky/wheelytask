@@ -1,10 +1,14 @@
 package ru.razomovsky.server;
 
 import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
@@ -23,7 +27,7 @@ import ru.razomovsky.auth.LoginActivity;
  * Created by vadim on 20/10/16.
  */
 
-public class ConnectionService extends IntentService {
+public class ConnectionService extends Service implements GoogleApiClient.ConnectionCallbacks {
 
     private static final String TAG = "ConnectionService";
 
@@ -32,17 +36,45 @@ public class ConnectionService extends IntentService {
     public static final String USER_NAME_ARG = "ru.razomovsky.server.ConnectionService.USER_NAME_ARG";
     public static final String PASSWORD_ARG = "ru.razomovsky.server.ConnectionService.PASSWORD_ARG";
 
-    private static WebSocket ws;
+    private WebSocket ws;
+    private GoogleApiClient mGoogleApiClient;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
 
-    public ConnectionService() {
-        this("ConnectionService");
-    }
-    public ConnectionService(String name) {
-        super(name);
-        setIntentRedelivery(true);
+        mGoogleApiClient.connect();
     }
 
     @Override
+    public void onConnected(Bundle bundle) {
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                onHandleIntent(intent);
+            }
+        }).start();
+
+        return START_REDELIVER_INTENT;
+    }
     protected void onHandleIntent(Intent intent) {
         WebSocketFactory factory = new WebSocketFactory();
         try {
