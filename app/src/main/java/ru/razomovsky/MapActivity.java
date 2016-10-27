@@ -1,7 +1,12 @@
 package ru.razomovsky;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -37,6 +42,10 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
      * key is the id of the cab
      */
     private Map<Integer, Marker> cabs = new HashMap<>();
+
+    private CabLocationsBroadcastReceiver receiver = new CabLocationsBroadcastReceiver();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +89,36 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
         }
 
         cabs = newCabs;
+    }
+
+
+    private class CabLocationsBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (map == null) {
+                return;
+            }
+            CabLocation[] locations =
+                    (CabLocation[]) intent.getParcelableArrayExtra(CAB_LOCATIONS_ARG);
+            if (locations == null) {
+                throw new IllegalStateException(
+                        "Need to set cab locations in CAB_LOCATIONS_INTENT_FILTER broadcast");
+            }
+            updateCabs(locations);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(CAB_LOCATIONS_INTENT_FILTER));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
 }
