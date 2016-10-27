@@ -1,14 +1,20 @@
 package ru.razomovsky.server;
 
-import android.app.IntentService;
+import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
@@ -38,6 +44,16 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
 
     private WebSocket ws;
     private GoogleApiClient mGoogleApiClient;
+    private boolean isNeedLocationUpdates = false;
+
+    private LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.d(TAG, "new location: " + location);
+        }
+    };
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -75,6 +91,36 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
 
         return START_REDELIVER_INTENT;
     }
+
+    private void requestLocationUpdates() {
+        if (!mGoogleApiClient.isConnected()) {
+            Log.w(TAG, "google client does not connected");
+            isNeedLocationUpdates = true;
+            return;
+        }
+        Log.w(TAG, "requestLocationUpdates");
+
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setInterval(10000); // 10 seconds
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "permission not granted");
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                locationRequest, locationListener);
+        isNeedLocationUpdates = false;
+
+    }
+
+    private void removeLocationUpdates() {
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    mGoogleApiClient, locationListener);
+        }
+    }
+
     protected void onHandleIntent(Intent intent) {
         WebSocketFactory factory = new WebSocketFactory();
         try {
