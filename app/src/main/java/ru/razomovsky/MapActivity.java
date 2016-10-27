@@ -22,6 +22,7 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
             "ru.razomovsky.MapActivity.CAB_LOCATIONS_INTENT_FILTER";
 
     private GoogleMap map;
+    MarkerView markerView;
 
     /**
      * key is the id of the cab
@@ -36,12 +37,22 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapCabsTracking);
         mapFragment.getMapAsync(this);
+        markerView = new MarkerView(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "onMapReady called");
         map = googleMap;
+    }
+
+    private Marker putMarker(int id, LatLng position) {
+        markerView.setCabId(id);
+        Bitmap bitmap = markerView.createBitmap();
+        MarkerOptions markerOptions = new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                .position(position);
+        return map.addMarker(markerOptions);
     }
 
 }
