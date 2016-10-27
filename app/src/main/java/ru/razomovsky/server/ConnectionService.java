@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -67,6 +69,9 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
 
     @Override
     public void onConnected(Bundle bundle) {
+        if (isNeedLocationUpdates) {
+            requestLocationUpdates();
+        }
     }
 
     @Override
@@ -146,6 +151,12 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                     Log.d(TAG, "Connected to server");
                     sendLoginResultBroadcast(ResponseCodes.SUCCESS);
 
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            requestLocationUpdates();
+                        }
+                    });
                 }
 
                 @Override
