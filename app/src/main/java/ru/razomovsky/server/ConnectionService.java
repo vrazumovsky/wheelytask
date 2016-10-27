@@ -27,10 +27,12 @@ public class ConnectionService extends IntentService {
 
     private static final String TAG = "ConnectionService";
 
-    private static final String BACKEND_URL = "ws://mini-mdt.wheely.com";
+    private static final String BACKEND_URL = "ws://mini-mdt.wheely.com/";
 
     public static final String USER_NAME_ARG = "ru.razomovsky.server.ConnectionService.USER_NAME_ARG";
     public static final String PASSWORD_ARG = "ru.razomovsky.server.ConnectionService.PASSWORD_ARG";
+
+    private static WebSocket ws;
 
     public ConnectionService() {
         this("ConnectionService");
@@ -51,7 +53,13 @@ public class ConnectionService extends IntentService {
                     "?username=" + userName +
                     "&password=" + password;
 
-            WebSocket ws = factory.createSocket(socketUrl);
+
+            if (ws != null) {
+                ws.disconnect();
+                ws = null;
+            }
+
+            ws = factory.createSocket(socketUrl);
             ws.addListener(new WebSocketAdapter() {
 
                 @Override
