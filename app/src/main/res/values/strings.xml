@@ -7,5 +7,6 @@
 
     <string name="empty_login_password_warning">Login and password can not be empty</string>
     <string name="login_password_error">Wrong login or password</string>
+    <string name="permission_error">Error: unable to login due to location permission denied</string>
 
 </resources>

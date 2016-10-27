@@ -1,11 +1,16 @@
 package ru.razomovsky.auth;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,10 +25,13 @@ import ru.razomovsky.ui.ProgressDialogFragment;
 
 public class LoginActivity extends ToolbarActivity {
 
+    public static final String TAG = "LoginActivity";
+    
     public static final String LOGIN_RESULT_ARG = "ru.razumovsky.auth.LoginActivity.LOGIN_RESULT_ARG";
     public static final String LOGIN_RESULT_INTENT_FILTER =
             "ru.razumovsky.auth.LoginActivity.LOGIN_RESULT_INTENT_FILTER";
 
+    private static final int REQUEST_LOCATION_PERMISSION = 17;
 
     private EditText loginEditText;
     private EditText passwordEditText;
@@ -53,17 +61,54 @@ public class LoginActivity extends ToolbarActivity {
                         dialogFragment = new ProgressDialogFragment();
                     }
                     dialogFragment.show(getSupportFragmentManager(), null);
-
-                    Intent intent = new Intent(LoginActivity.this, ConnectionService.class);
-                    intent.putExtra(ConnectionService.USER_NAME_ARG, loginEditText.getText().toString());
-                    intent.putExtra(ConnectionService.PASSWORD_ARG, passwordEditText.getText().toString());
-                    startService(intent);
+                    requestLocationPermission();
                 } else {
                     Toast.makeText(LoginActivity.this,
                             R.string.empty_login_password_warning, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        } else {
+            startConnectionService();
+        }
+    }
+
+    private void startConnectionService() {
+        Intent intent = new Intent(LoginActivity.this, ConnectionService.class);
+        intent.putExtra(ConnectionService.USER_NAME_ARG, loginEditText.getText().toString());
+        intent.putExtra(ConnectionService.PASSWORD_ARG, passwordEditText.getText().toString());
+        startService(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "onRequestPermissionsResult: Permision granted");
+                    startConnectionService();
+                } else {
+                    Log.d(TAG, "onRequestPermissionsResult: Permision denied ");
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialogFragment.dismiss();
+                            Toast.makeText(LoginActivity.this,
+                                    R.string.permission_error, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                break;
+        }
     }
 
     private boolean isLoginPasswordValid() {
