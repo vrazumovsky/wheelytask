@@ -1,13 +1,22 @@
 package ru.razomovsky;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ru.razomovsky.base.ToolbarActivity;
+import ru.razomovsky.server.CabLocation;
 
 /**
  * Created by vadim on 22/10/16.
@@ -53,6 +62,24 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
                 .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
                 .position(position);
         return map.addMarker(markerOptions);
+    }
+
+    private void updateCabs(CabLocation[] locations) {
+        Map<Integer, Marker> newCabs = new HashMap<>();
+        for (CabLocation location : locations) {
+            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+            Marker marker = cabs.get(location.getCabId());
+
+            if (marker == null) {
+                marker = putMarker(location.getCabId(), position);
+            } else {
+                marker.setPosition(position);
+            }
+
+            newCabs.put(location.getCabId(), marker);
+        }
+
+        cabs = newCabs;
     }
 
 }
