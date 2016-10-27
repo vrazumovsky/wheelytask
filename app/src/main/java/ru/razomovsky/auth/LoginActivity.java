@@ -27,6 +27,8 @@ public class LoginActivity extends ToolbarActivity {
 
     public static final String TAG = "LoginActivity";
     private static final String DIALOG_TAG = "DIALOG_TAG";
+    private static final String PROGRESS_ARG = "PROGRESS_ARG";
+
     
     public static final String LOGIN_RESULT_ARG = "ru.razumovsky.auth.LoginActivity.LOGIN_RESULT_ARG";
     public static final String LOGIN_RESULT_INTENT_FILTER =
@@ -142,9 +144,19 @@ public class LoginActivity extends ToolbarActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!requestInProgress) {
+            dialogFragment.dismiss();
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(PROGRESS_ARG, requestInProgress);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
