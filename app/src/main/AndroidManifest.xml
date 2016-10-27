@@ -12,6 +12,12 @@
         android:theme="@style/AppTheme"
         android:name="android.support.multidex.MultiDexApplication">
 
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDaz5vctYI2j9c6PeHvVLKaA1RpWjJWvYQ"/>
+
+
         <activity android:name=".auth.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
