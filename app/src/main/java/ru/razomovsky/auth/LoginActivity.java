@@ -134,6 +134,7 @@ public class LoginActivity extends ToolbarActivity {
                         R.string.login_password_error, Toast.LENGTH_SHORT).show();
             } else if (result == ResponseCodes.SUCCESS) {
                 startActivity(new Intent(LoginActivity.this, MapActivity.class));
+                finish();
             } else {
 //                throw new IllegalArgumentException("Unsupported result code: " + result);
                 Toast.makeText(LoginActivity.this,
