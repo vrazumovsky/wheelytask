@@ -1,7 +1,10 @@
 package ru.razomovsky;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
+
+import ru.razomovsky.server.ConnectionService;
 
 /**
  * Created by vadim on 29/10/16.
@@ -33,5 +36,6 @@ public class WheelyTaskApp extends Application {
 
     public void disconnect() {
         saveHash(null);
+        stopService(new Intent(this, ConnectionService.class));
     }
 }
