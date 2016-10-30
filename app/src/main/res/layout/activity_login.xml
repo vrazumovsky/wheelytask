@@ -50,5 +50,6 @@
         android:textSize="18sp"
         android:background="@color/colorAccent"
         android:layout_width="200dp"
-        android:layout_height="64dp" />
+        android:layout_height="64dp"
+        android:textColor="@color/colorPrimaryDark"/>
 </LinearLayout>
