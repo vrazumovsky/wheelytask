@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +41,8 @@ import ru.razomovsky.server.CabLocation;
 
 public class MapActivity extends ToolbarActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks {
+
+    public static final LatLng MOSCOW = new LatLng(55.754991, 37.622919);
 
     private static final String TAG = "MapActivity";
 
@@ -102,10 +107,41 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback,
         if (cabLocations != null) {
             updateCabs(cabLocations);
         }
+
+        if (mGoogleApiClient.isConnected()) {
+            moveCamera();
+        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         map.setMyLocationEnabled(true);
+    }
+
+    private void moveCamera() {
+        if (map == null) {
+            return;
+        }
+        LatLng position;
+        Location lastLocation = null;
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+        } else {
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+
+
+        if (lastLocation != null) {
+            position = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        } else {
+            position = MOSCOW;
+        }
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10));
     }
 
     private Marker putMarker(int id, LatLng position) {
@@ -156,6 +192,9 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback,
 
     @Override
     public void onConnected(Bundle bundle) {
+        if (map != null) {
+            moveCamera();
+        }
     }
 
     @Override
