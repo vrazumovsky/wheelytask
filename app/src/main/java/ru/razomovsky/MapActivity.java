@@ -17,13 +17,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.razomovsky.auth.LoginActivity;
 import ru.razomovsky.base.ToolbarActivity;
 import ru.razomovsky.server.CabLocation;
-import ru.razomovsky.server.ConnectionService;
 
 /**
  * Created by vadim on 22/10/16.
@@ -51,6 +50,17 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String hash = ((WheelyTaskApp) getApplication()).getHash();
+        if (hash != null && !hash.equals("")) {
+            Log.d(TAG, "login succeeded");
+            Log.d(TAG, hash);
+        } else {
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
+
         setContentView(R.layout.activity_map);
         setToolbar(R.string.cab_tracking);
 

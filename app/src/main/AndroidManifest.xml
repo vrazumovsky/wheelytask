@@ -20,7 +20,7 @@
             android:value="AIzaSyDaz5vctYI2j9c6PeHvVLKaA1RpWjJWvYQ"/>
 
 
-        <activity android:name=".auth.LoginActivity">
+        <activity android:name=".MapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MapActivity" />
+        <activity android:name=".auth.LoginActivity" />
 
         <service android:name=".server.ConnectionService" />
 
