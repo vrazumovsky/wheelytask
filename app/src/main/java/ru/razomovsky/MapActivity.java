@@ -1,17 +1,22 @@
 package ru.razomovsky;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.Parcelable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -31,7 +36,8 @@ import ru.razomovsky.server.CabLocation;
  * Created by vadim on 22/10/16.
  */
 
-public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
+public class MapActivity extends ToolbarActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks {
 
     private static final String TAG = "MapActivity";
 
@@ -44,6 +50,9 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private MarkerView markerView;
+
+    private GoogleApiClient mGoogleApiClient;
+
 
     /**
      * key is the id of the cab
@@ -75,16 +84,28 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.mapCabsTracking);
         mapFragment.getMapAsync(this);
         markerView = new MarkerView(this);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        mGoogleApiClient.connect();
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "onMapReady called");
         map = googleMap;
-        map.setMyLocationEnabled(true);
+
         if (cabLocations != null) {
             updateCabs(cabLocations);
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        map.setMyLocationEnabled(true);
     }
 
     private Marker putMarker(int id, LatLng position) {
@@ -131,6 +152,15 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
         if (map != null) {
             updateCabs(cabLocations);
         }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 
     private class CabLocationsBroadcastReceiver extends BroadcastReceiver {
