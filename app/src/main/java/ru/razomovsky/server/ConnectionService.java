@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.razomovsky.MapActivity;
+import ru.razomovsky.WheelyTaskApp;
 import ru.razomovsky.auth.LoginActivity;
 
 /**
@@ -164,6 +165,8 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     super.onConnected(websocket, headers);
                     Log.d(TAG, "Connected to server");
+
+                    ((WheelyTaskApp) getApplication()).saveHash(websocket.getURI().toString());
                     sendLoginResultBroadcast(ResponseCodes.SUCCESS);
 
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
