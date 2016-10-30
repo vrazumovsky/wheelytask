@@ -1,4 +1,4 @@
-package ru.razomovsky.ui;
+package ru.razomovsky.wheelytask.ui;
 
 
 import android.app.Dialog;
@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.razomovsky.R;
+import ru.razomovsky.wheelytask.R;
 
 /**
  * Created by vadim on 22/10/16.

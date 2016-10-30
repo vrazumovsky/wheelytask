@@ -1,10 +1,10 @@
-package ru.razomovsky;
+package ru.razomovsky.wheelytask;
 
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import ru.razomovsky.server.ConnectionService;
+import ru.razomovsky.wheelytask.server.ConnectionService;
 
 /**
  * Created by vadim on 29/10/16.
@@ -12,7 +12,7 @@ import ru.razomovsky.server.ConnectionService;
 
 public class WheelyTaskApp extends Application {
 
-    public static final String HASH_ARG = "ru.razomovsky.WheelyTaskApp.hash";
+    public static final String HASH_ARG = "ru.razomovsky.wheelytask.WheelyTaskApp.hash";
 
     private SharedPreferences preferences;
 

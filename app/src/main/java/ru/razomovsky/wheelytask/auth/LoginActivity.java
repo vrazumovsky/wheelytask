@@ -1,4 +1,4 @@
-package ru.razomovsky.auth;
+package ru.razomovsky.wheelytask.auth;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -19,12 +19,12 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru.razomovsky.MapActivity;
-import ru.razomovsky.R;
-import ru.razomovsky.base.ToolbarActivity;
-import ru.razomovsky.server.ConnectionService;
-import ru.razomovsky.server.ResponseCodes;
-import ru.razomovsky.ui.ProgressDialogFragment;
+import ru.razomovsky.wheelytask.MapActivity;
+import ru.razomovsky.wheelytask.R;
+import ru.razomovsky.wheelytask.base.ToolbarActivity;
+import ru.razomovsky.wheelytask.server.ConnectionService;
+import ru.razomovsky.wheelytask.server.ResponseCodes;
+import ru.razomovsky.wheelytask.ui.ProgressDialogFragment;
 
 public class LoginActivity extends ToolbarActivity {
 

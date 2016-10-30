@@ -1,8 +1,8 @@
-package ru.razomovsky.base;
+package ru.razomovsky.wheelytask.base;
 
 import android.support.v7.app.AppCompatActivity;
 
-import ru.razomovsky.R;
+import ru.razomovsky.wheelytask.R;
 
 
 /**

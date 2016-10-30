@@ -1,4 +1,4 @@
-package ru.razomovsky.server;
+package ru.razomovsky.wheelytask.server;
 
 import android.os.Parcel;
 import android.os.Parcelable;

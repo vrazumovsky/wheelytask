@@ -1,4 +1,4 @@
-package ru.razomovsky;
+package ru.razomovsky.wheelytask;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -27,13 +27,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.razomovsky.auth.LoginActivity;
-import ru.razomovsky.base.ToolbarActivity;
-import ru.razomovsky.server.CabLocation;
+import ru.razomovsky.wheelytask.auth.LoginActivity;
+import ru.razomovsky.wheelytask.base.ToolbarActivity;
+import ru.razomovsky.wheelytask.server.CabLocation;
 
 /**
  * Created by vadim on 22/10/16.
@@ -46,9 +45,9 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback,
 
     private static final String TAG = "MapActivity";
 
-    public static final String CAB_LOCATIONS_ARG = "ru.razomovsky.MapActivity.CAB_LOCATIONS_ARG";
+    public static final String CAB_LOCATIONS_ARG = "ru.razomovsky.wheelytask.MapActivity.CAB_LOCATIONS_ARG";
     public static final String CAB_LOCATIONS_INTENT_FILTER =
-            "ru.razomovsky.MapActivity.CAB_LOCATIONS_INTENT_FILTER";
+            "ru.razomovsky.wheelytask.MapActivity.CAB_LOCATIONS_INTENT_FILTER";
 
     public static final int DISCONNECT_MENU_ITEM_ID = 1;
     public static final String DISCONNECT_MENU_ITEM_TITLE = "Disconnect";

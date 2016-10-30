@@ -1,4 +1,4 @@
-package ru.razomovsky.server;
+package ru.razomovsky.wheelytask.server;
 
 /**
  * Created by vadim on 25/10/16.

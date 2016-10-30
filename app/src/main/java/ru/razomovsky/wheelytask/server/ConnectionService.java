@@ -1,4 +1,4 @@
-package ru.razomovsky.server;
+package ru.razomovsky.wheelytask.server;
 
 import android.Manifest;
 import android.app.Service;
@@ -28,9 +28,9 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import java.util.List;
 import java.util.Map;
 
-import ru.razomovsky.MapActivity;
-import ru.razomovsky.WheelyTaskApp;
-import ru.razomovsky.auth.LoginActivity;
+import ru.razomovsky.wheelytask.MapActivity;
+import ru.razomovsky.wheelytask.WheelyTaskApp;
+import ru.razomovsky.wheelytask.auth.LoginActivity;
 
 /**
  * Created by vadim on 20/10/16.
@@ -42,8 +42,8 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
 
     private static final String BACKEND_URL = "ws://mini-mdt.wheely.com/";
 
-    public static final String USER_NAME_ARG = "ru.razomovsky.server.ConnectionService.USER_NAME_ARG";
-    public static final String PASSWORD_ARG = "ru.razomovsky.server.ConnectionService.PASSWORD_ARG";
+    public static final String USER_NAME_ARG = "ru.razomovsky.wheelytask.server.ConnectionService.USER_NAME_ARG";
+    public static final String PASSWORD_ARG = "ru.razomovsky.wheelytask.server.ConnectionService.PASSWORD_ARG";
 
     private final Object webSocketLock = new Object();
     private WebSocket ws;
@@ -200,13 +200,15 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     super.onError(websocket, cause);
-                    cause.printStackTrace();
+                    Log.d(TAG, "onError");
+//                    cause.printStackTrace();
                 }
 
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     super.onConnectError(websocket, exception);
-                    exception.printStackTrace();
+                    Log.d(TAG, "onConnectError");
+//                    exception.printStackTrace();
                 }
 
             });
@@ -217,7 +219,8 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
             Log.w(TAG, "Error code: " + String.valueOf(code));
             sendLoginResultBroadcast(code);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d(TAG, "common error");
+//            e.printStackTrace();
         }
     }
 

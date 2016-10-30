@@ -1,4 +1,4 @@
-package ru.razomovsky;
+package ru.razomovsky.wheelytask;
 
 import android.content.Context;
 import android.graphics.Bitmap;

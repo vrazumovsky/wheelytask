@@ -1,8 +1,8 @@
-package ru.razomovsky.util;
+package ru.razomovsky.wheelytask.util;
 
 import android.support.v7.app.AppCompatActivity;
 
-import ru.razomovsky.ui.ProgressDialogFragment;
+import ru.razomovsky.wheelytask.ui.ProgressDialogFragment;
 
 /**
  * Created by vadim on 22/10/16.
