@@ -33,6 +33,7 @@ import java.util.Map;
 import ru.razomovsky.wheelytask.auth.LoginActivity;
 import ru.razomovsky.wheelytask.base.ToolbarActivity;
 import ru.razomovsky.wheelytask.server.CabLocation;
+import ru.razomovsky.wheelytask.ui.MarkerView;
 
 /**
  * Created by vadim on 22/10/16.

@@ -1,4 +1,4 @@
-package ru.razomovsky.wheelytask;
+package ru.razomovsky.wheelytask.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import ru.razomovsky.wheelytask.R;
 
 /**
  * Created by vadim on 25/10/16.
