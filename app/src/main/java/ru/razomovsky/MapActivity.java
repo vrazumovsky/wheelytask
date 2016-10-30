@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
@@ -42,12 +43,13 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
     public static final String DISCONNECT_MENU_ITEM_TITLE = "Disconnect";
 
     private GoogleMap map;
-    MarkerView markerView;
+    private MarkerView markerView;
 
     /**
      * key is the id of the cab
      */
     private Map<Integer, Marker> cabs = new HashMap<>();
+    private CabLocation[] cabLocations;
 
     private CabLocationsBroadcastReceiver receiver = new CabLocationsBroadcastReceiver();
 
@@ -80,7 +82,9 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
         Log.i(TAG, "onMapReady called");
         map = googleMap;
         map.setMyLocationEnabled(true);
-
+        if (cabLocations != null) {
+            updateCabs(cabLocations);
+        }
     }
 
     private Marker putMarker(int id, LatLng position) {
@@ -110,19 +114,34 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
         cabs = newCabs;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArray(CAB_LOCATIONS_ARG, cabLocations);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        cabLocations = (CabLocation[]) savedInstanceState.getParcelableArray(CAB_LOCATIONS_ARG);
+        if (map != null) {
+            updateCabs(cabLocations);
+        }
+    }
 
     private class CabLocationsBroadcastReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (map == null) {
-                return;
-            }
             CabLocation[] locations =
                     (CabLocation[]) intent.getParcelableArrayExtra(CAB_LOCATIONS_ARG);
             if (locations == null) {
                 throw new IllegalStateException(
                         "Need to set cab locations in CAB_LOCATIONS_INTENT_FILTER broadcast");
+            }
+            cabLocations = locations;
+            if (map == null) {
+                return;
             }
             updateCabs(locations);
         }
