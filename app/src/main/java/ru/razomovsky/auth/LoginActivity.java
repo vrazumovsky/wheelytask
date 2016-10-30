@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ru.razomovsky.MapActivity;
 import ru.razomovsky.R;
 import ru.razomovsky.base.ToolbarActivity;
@@ -67,11 +70,12 @@ public class LoginActivity extends ToolbarActivity {
                     requestLocationPermission();
                 } else {
                     Toast.makeText(LoginActivity.this,
-                            R.string.empty_login_password_warning, Toast.LENGTH_SHORT).show();
+                            R.string.login_password_warning, Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
 
     private void requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
@@ -116,7 +120,15 @@ public class LoginActivity extends ToolbarActivity {
     }
 
     private boolean isLoginPasswordValid() {
-        return !isEditTextEmpty(loginEditText) && !isEditTextEmpty(passwordEditText);
+        return !isEditTextEmpty(loginEditText) && !isEditTextEmpty(passwordEditText) &&
+                !isContainsSpaceChar(loginEditText.getText().toString()) &&
+                !isContainsSpaceChar(passwordEditText.getText().toString());
+    }
+
+    static final Pattern spaceCharPattern = Pattern.compile("\\s");
+
+    private boolean isContainsSpaceChar(String string) {
+        return spaceCharPattern.matcher(string).find();
     }
 
     private boolean isEditTextEmpty(EditText editText) {
