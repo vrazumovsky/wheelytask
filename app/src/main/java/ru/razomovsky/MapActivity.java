@@ -123,7 +123,11 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        cabLocations = (CabLocation[]) savedInstanceState.getParcelableArray(CAB_LOCATIONS_ARG);
+        Parcelable[] parcelableArray = savedInstanceState.getParcelableArray(CAB_LOCATIONS_ARG);
+        if (parcelableArray == null) {
+            return;
+        }
+        cabLocations = (CabLocation[]) parcelableArray;
         if (map != null) {
             updateCabs(cabLocations);
         }
