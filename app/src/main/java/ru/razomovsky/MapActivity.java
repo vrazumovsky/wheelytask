@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +37,9 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
     public static final String CAB_LOCATIONS_ARG = "ru.razomovsky.MapActivity.CAB_LOCATIONS_ARG";
     public static final String CAB_LOCATIONS_INTENT_FILTER =
             "ru.razomovsky.MapActivity.CAB_LOCATIONS_INTENT_FILTER";
+
+    public static final int DISCONNECT_MENU_ITEM_ID = 1;
+    public static final String DISCONNECT_MENU_ITEM_TITLE = "Disconnect";
 
     private GoogleMap map;
     MarkerView markerView;
@@ -136,8 +141,26 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        stopService(new Intent(this, ConnectionService.class));
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(1, DISCONNECT_MENU_ITEM_ID, 0, DISCONNECT_MENU_ITEM_TITLE);
+        return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case DISCONNECT_MENU_ITEM_ID:
+                ((WheelyTaskApp) getApplication()).disconnect();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
 }
