@@ -1,7 +1,9 @@
 package ru.razomovsky.wheelytask.ui;
 
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -40,6 +42,15 @@ public class ProgressDialogFragment extends DialogFragment {
     public void dismiss() {
         if (isAdded()) {
             super.dismiss();
+        }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Activity activity = getActivity();
+        if (activity != null && activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
         }
     }
 }
