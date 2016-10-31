@@ -3,6 +3,7 @@ package ru.razomovsky.wheelytask.auth;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -26,7 +27,7 @@ import ru.razomovsky.wheelytask.server.ConnectionService;
 import ru.razomovsky.wheelytask.server.ResponseCodes;
 import ru.razomovsky.wheelytask.ui.ProgressDialogFragment;
 
-public class LoginActivity extends ToolbarActivity {
+public class LoginActivity extends ToolbarActivity implements DialogInterface.OnDismissListener {
 
     public static final String TAG = "LoginActivity";
     private static final String DIALOG_TAG = "DIALOG_TAG";
@@ -135,9 +136,18 @@ public class LoginActivity extends ToolbarActivity {
         return editText.getText() == null || editText.getText().toString().equals("");
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        requestInProgress = false;
+    }
+
     private class LoginResultBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (!requestInProgress) {
+                Log.w(TAG, "request was cancelled");
+                return;
+            }
             int result = intent.getIntExtra(LOGIN_RESULT_ARG, -1);
             if (result == -1) {
                 throw new IllegalStateException("Need to set login result in broadcast");
