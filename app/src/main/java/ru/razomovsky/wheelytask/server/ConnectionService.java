@@ -144,12 +144,24 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
     protected void onHandleIntent(Intent intent) {
         WebSocketFactory factory = new WebSocketFactory();
         try {
+            String socketUrl;
 
             String userName = intent.getStringExtra(USER_NAME_ARG);
             String password = intent.getStringExtra(PASSWORD_ARG);
-            String socketUrl = BACKEND_URL +
-                    "?username=" + userName +
-                    "&password=" + password;
+            if (userName != null && password != null) {
+                socketUrl = BACKEND_URL +
+                        "?username=" + userName +
+                        "&password=" + password;
+            } else {
+                synchronized (webSocketLock) {
+                    if (ws != null && ws.isOpen()) {
+                        Log.d(TAG, "websocket is open");
+                        //do nothing
+                        return;
+                    }
+                }
+                socketUrl = ((WheelyTaskApp) getApplication()).getHash();
+            }
 
             synchronized (webSocketLock) {
                 if (ws != null) {
