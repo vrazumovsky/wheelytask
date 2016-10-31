@@ -33,6 +33,7 @@ import java.util.Map;
 import ru.razomovsky.wheelytask.auth.LoginActivity;
 import ru.razomovsky.wheelytask.base.ToolbarActivity;
 import ru.razomovsky.wheelytask.server.CabLocation;
+import ru.razomovsky.wheelytask.server.ConnectionService;
 import ru.razomovsky.wheelytask.ui.MarkerView;
 
 /**
@@ -76,6 +77,7 @@ public class MapActivity extends ToolbarActivity implements OnMapReadyCallback,
         if (hash != null && !hash.equals("")) {
             Log.d(TAG, "login succeeded");
             Log.d(TAG, hash);
+            startService(new Intent(this, ConnectionService.class));
         } else {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
