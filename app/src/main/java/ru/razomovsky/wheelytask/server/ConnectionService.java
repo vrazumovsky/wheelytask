@@ -175,6 +175,12 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                 }
             }
 
+            if (socketUrl == null) {
+                //empty intent and no hash saved -> no internet connection -> login error
+                Log.e(TAG, "login error due to no internet connection");
+                sendLoginResultBroadcast(ResponseCodes.SERVICE_UNAVAILABLE);
+                return;
+            }
             ws = factory.createSocket(socketUrl);
             ws.addListener(new WebSocketAdapter() {
 

@@ -147,6 +147,9 @@ public class LoginActivity extends ToolbarActivity {
             } else if (result == ResponseCodes.SUCCESS) {
                 startActivity(new Intent(LoginActivity.this, MapActivity.class));
                 finish();
+            } else if (result == ResponseCodes.SERVICE_UNAVAILABLE) {
+                Toast.makeText(LoginActivity.this,
+                        R.string.service_unavailable, Toast.LENGTH_SHORT).show();
             } else {
 //                throw new IllegalArgumentException("Unsupported result code: " + result);
                 Toast.makeText(LoginActivity.this,

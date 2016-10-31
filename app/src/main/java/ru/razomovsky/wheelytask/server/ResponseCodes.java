@@ -7,4 +7,5 @@ package ru.razomovsky.wheelytask.server;
 public interface ResponseCodes {
     int SUCCESS = 200;
     int FORBIDDEN = 403;
+    int SERVICE_UNAVAILABLE = 503;
 }

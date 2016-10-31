@@ -8,5 +8,6 @@
     <string name="login_password_warning">Incorrect login or password</string>
     <string name="login_password_error">Wrong login or password</string>
     <string name="permission_error">Error: unable to login due to location permission denied</string>
+    <string name="service_unavailable">Error: service unavailable</string>
 
 </resources>
