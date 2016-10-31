@@ -27,6 +27,9 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ru.razomovsky.wheelytask.MapActivity;
 import ru.razomovsky.wheelytask.WheelyTaskApp;
@@ -49,6 +52,8 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
     private WebSocket ws;
     private GoogleApiClient mGoogleApiClient;
     private boolean isNeedLocationUpdates = false;
+    private AtomicBoolean errorOccured = new AtomicBoolean(false);
+    private Timer reconnectTimer;
 
     private LocationListener locationListener = new LocationListener() {
         @Override
@@ -118,7 +123,7 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
             isNeedLocationUpdates = true;
             return;
         }
-        Log.w(TAG, "requestLocationUpdates");
+        Log.d(TAG, "requestLocationUpdates");
 
         LocationRequest locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
@@ -178,6 +183,8 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                     super.onConnected(websocket, headers);
                     Log.d(TAG, "Connected to server");
 
+                    errorOccured.set(false);
+
                     ((WheelyTaskApp) getApplication()).saveHash(websocket.getURI().toString());
                     sendLoginResultBroadcast(ResponseCodes.SUCCESS);
 
@@ -190,9 +197,12 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                 }
 
                 @Override
-                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                public void onDisconnected(final WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                     Log.d(TAG, "disconnected: " + websocket.getURI().toString());
+                    if (errorOccured.get()) {
+                        scheduleReconnectTimer();
+                    }
                 }
 
                 @Override
@@ -213,7 +223,7 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     super.onError(websocket, cause);
                     Log.d(TAG, "onError");
-//                    cause.printStackTrace();
+                    errorOccured.set(true);
                 }
 
                 @Override
@@ -230,10 +240,26 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
             int code = e.getStatusLine().getStatusCode();
             Log.w(TAG, "Error code: " + String.valueOf(code));
             sendLoginResultBroadcast(code);
+        } catch (WebSocketException e) {
+            Log.d(TAG, "failed to connect");
+            scheduleReconnectTimer();
         } catch (Exception e) {
-            Log.d(TAG, "common error");
-//            e.printStackTrace();
+            Log.e(TAG, "unsupported error");
+            e.printStackTrace();
         }
+    }
+
+    private synchronized void scheduleReconnectTimer() {
+        if (reconnectTimer != null) {
+            reconnectTimer.cancel();
+        }
+        reconnectTimer = new Timer();
+        reconnectTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                onHandleIntent(new Intent());
+            }
+        }, 5000);
     }
 
     private void sendLoginResultBroadcast(int result){
@@ -255,6 +281,9 @@ public class ConnectionService extends Service implements GoogleApiClient.Connec
         mGoogleApiClient.disconnect();
         if (ws != null) {
             ws.disconnect();
+        }
+        if (reconnectTimer != null) {
+            reconnectTimer.cancel();
         }
     }
 }
